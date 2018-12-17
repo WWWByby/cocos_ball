@@ -13,22 +13,30 @@ const {ccclass, property} = cc._decorator;
 @ccclass
 export default class Basketball extends cc.Component {
 
+    //球当前节点
     @property(cc.Node)
     basketballNode: cc.Node = null;
 
-    // LIFE-CYCLE CALLBACKS:
 
     onLoad () {
 
-        if ( this.basketballNode ==null ) {
-            this.basketballNode = this.node;
+        if(this.basketballNode == null)
+        {   
+            let tmpNode = this.node;
+            while (tmpNode.parent != null && tmpNode.parent.name != "Canvas") {
+                tmpNode = tmpNode.parent;
+            }
+            cc.log("root name" , tmpNode.name);
+            this.basketballNode = tmpNode;
         }
         // 随机出现在屏幕上
-        const x = this.node.width * (Math.random() - .5);
-        const y = this.node.height * (Math.random() - .5);
+        const x = this.basketballNode.width * (Math.random() - .5);
+        const y = this.basketballNode.height * (Math.random() - .5);
 
-        cc.log("pos",x,y);
-        this.basketballNode.setPosition(cc.v2(x, y))
+        cc.log("pos",x, y);
+        this.node.setPosition(cc.v2(x, y));
+
+        cc.log("new pos ",this.node.x ,this.node.y);
     }
 
     // start () {}
