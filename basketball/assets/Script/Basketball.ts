@@ -16,9 +16,7 @@ export default class Basketball extends cc.Component {
     //球当前节点
     @property(cc.Node)
     basketballNode: cc.Node = null;
-
-
-    onLoad () {
+    onEnable () {
 
         if(this.basketballNode == null)
         {   
@@ -30,16 +28,9 @@ export default class Basketball extends cc.Component {
             this.basketballNode = tmpNode;
         }
         // 随机出现在屏幕上
-        const x = this.basketballNode.width * (Math.random() - .5);
-        const y = this.basketballNode.height * (Math.random() - .5);
+        const x = cc.winSize.width * (Math.random() - .5);
+        const y = cc.winSize.height * (Math.random() - .5);
 
-        cc.log("pos",x, y);
         this.node.setPosition(cc.v2(x, y));
-
-        cc.log("new pos ",this.node.x ,this.node.y);
     }
-
-    // start () {}
-
-    // update (dt) {}
 }

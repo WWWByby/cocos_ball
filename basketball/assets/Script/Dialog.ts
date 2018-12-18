@@ -21,9 +21,6 @@ export default class Dialog extends cc.Component {
     @property(cc.Label)
     timerLabel: cc.Label = null;
 
-    @property (GameManager)
-    manager : GameManager = null;
-
     @property
     text: string = '进球数：';
     
@@ -34,43 +31,51 @@ export default class Dialog extends cc.Component {
     private resettimer : number = 0;
     
     private completeAction : cc.Action = null;
-    
-     Compelete() {
-        cc.log("执行完成");  
-      }
-    
+
+    private static instance :Dialog;
+    public static get GetInstance() :  Dialog{
+        return Dialog.instance;
+    }
+
+    onLoad ()
+    {
+        if (Dialog.instance == null) {
+            Dialog.instance = this;
+        }else
+        {
+            Dialog.instance.node.destroy();
+            Dialog.instance = this;
+        }
+
+        if (this.timerLabel) {
+            this.timerLabel.node.active = false;
+        }
+    }
+
     start () {
         this.FreshScore();
         
         // this.completeAction.clone = this.Compelete;
-        // this.ResetTimer(10);
+        
     }
     //分数刷新
     FreshScore()
     {
-        this.label.string = this.text + this.manager.count;
+        this.label.string = this.text + GameManager.GetInstance.currentCount;
     }
 
     //还原成新时间
     ResetTimer(_timer) {
         this.timer = -1;
         this.resettimer = _timer;
-
         this.timer =  this.resettimer;
         // cc.log("还原计时器",this.resettimer);
-
         if (this.timerLabel) {
             this.timerLabel.node.active = true;
         }
     }
 
-
-    onLoad ()
-    {
-        if (this.timerLabel) {
-            this.timerLabel.node.active = false;
-        }
-    }
+    
 
     update (dt) {
         if(this.timer >0)
@@ -79,11 +84,51 @@ export default class Dialog extends cc.Component {
 
             this.timerLabel.string = (Math.ceil(this.timer)).toString();
 
-            if (this.timer  <=0) {
-                if (this.completeAction) {
-                    this.node.runAction(this.completeAction);
-                } 
+            if (this.timer  <=0) 
+            {
+                GameManager.GetInstance.status = false;
+                GameManager.GetInstance.PushSettleLog();
             }
+        }
+    }
+
+
+    private stackList : cc.Node[] = [];
+
+    Push ( name)
+    {
+        let _node = this.node.getChildByName(name);
+        this.stackList.push(_node);
+        if (_node) {
+            _node.active = true;
+        }
+        else
+            cc.error(name + " is not find");
+    }
+
+    GetStackLength ()
+    {
+        return this.stackList.length;
+    }
+
+    PopDialog ()
+    {
+        if (this.stackList.length == 0) {
+            cc.error("pop is failed");
+            return ;
+        }
+        let _node = this.stackList.pop();
+        if (_node) {
+            _node.active = false;
+        }
+        else
+            cc.error(name + " is not find");
+    }
+
+    ResetDialog ()
+    {
+        while (this.GetStackLength()!=0 ) {
+            this.PopDialog();
         }
     }
 }
