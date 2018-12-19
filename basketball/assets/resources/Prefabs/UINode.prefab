@@ -26,13 +26,10 @@
     "_components": [
       {
         "__id__": 10
-      },
-      {
-        "__id__": 11
       }
     ],
     "_prefab": {
-      "__id__": 12
+      "__id__": 11
     },
     "_id": "",
     "_opacity": 255,
@@ -181,7 +178,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "e629644a-05bf-4521-8623-8cf1174b24da"
     },
     "fileId": "bbr9DkZGhCLYyHoMGwTQNV",
     "sync": false
@@ -297,7 +294,7 @@
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "e629644a-05bf-4521-8623-8cf1174b24da"
     },
     "fileId": "9bz3oiMvtLOL7F7tJjDdW8",
     "sync": false
@@ -329,31 +326,12 @@
     "_originalHeight": 0
   },
   {
-    "__type__": "99287jotABEeowbwsjTzwuE",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "label": {
-      "__id__": 3
-    },
-    "timerLabel": {
-      "__id__": 7
-    },
-    "manager": null,
-    "text": "进球数：",
-    "timer": 0,
-    "resettimer": 0
-  },
-  {
     "__type__": "cc.PrefabInfo",
     "root": {
       "__id__": 1
     },
     "asset": {
-      "__id__": 0
+      "__uuid__": "e629644a-05bf-4521-8623-8cf1174b24da"
     },
     "fileId": "c8oKlA83hGtJD8Hkd3CPmF",
     "sync": false

@@ -1,4 +1,5 @@
 import GameManager from "./GameManager";
+import BasketModule from "../assets/Script/module/BasketModule";
 
 // Learn TypeScript:
 //  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/typescript.html
@@ -48,48 +49,22 @@ export default class TouchMove extends cc.Component {
         }
         let touch = this.getTouchNode();
         touch.on('touchmove', onTouchMove, touch);
-        this.node.on('mouseup',function(event){
-            
-        },this); 
-        let drag = this.mouseDrag;
 
-        function MouseUp(event) {
-            cc.log("手指离开？",this.mouseDrag);
+        this.node.on('touchend',function(event)
+        {
             if (this.mouseDrag) {
-                GameManager.GetInstance.AddScore();
-
-                if (GameManager.GetInstance.status) {
-                    GameManager.GetInstance.AddBall();
-                }
+                
             }
-        }
-
-        this.node.on('touchend',MouseUp,this);
-        cc.director.getCollisionManager().enabled = true;   
-        cc.director.getCollisionManager().enabledDebugDraw = true;
-        cc.director.getCollisionManager().enabledDrawBoundingBox = true;
-    }
-
-    GetDrag ()
-    {
-        
+        },this);
     }
 
     onCollisionEnter  (other ,self)
     {
-            // if(other.group == "win")
-            // {
-                // this.uilog.FreshScore();
-                // this.node.destroy();
-                this.mouseDrag = true;
-                cc.log("enter ------>>>>",this.mouseDrag );
-            // }
+        this.mouseDrag = true;
     }
 
     onCollisionExit () 
     {
-        cc.log("exit ------>>>>");
         this.mouseDrag = false;
     }
-    // update (dt) {}
 }
