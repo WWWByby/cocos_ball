@@ -24,9 +24,9 @@ export default class StartUp extends cc.Component {
     onLoad ()
     {
         StartUp.instance = this;
-        cc.director.getCollisionManager().enabled = true;   
-        cc.director.getCollisionManager().enabledDebugDraw = true;
-        cc.director.getCollisionManager().enabledDrawBoundingBox = true;
+        // cc.director.getCollisionManager().enabled = true;   
+        // cc.director.getCollisionManager().enabledDebugDraw = true;
+        // cc.director.getCollisionManager().enabledDrawBoundingBox = true;
     }
 
     start ()
