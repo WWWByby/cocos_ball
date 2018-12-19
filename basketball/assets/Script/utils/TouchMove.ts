@@ -1,12 +1,6 @@
-// Learn TypeScript:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/typescript.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/reference/attributes.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
+import BasketModule from "../module/BasketModule";
+import Test from "../Test";
+import GameModule from "../module/GameModule";
 
 const {ccclass, property} = cc._decorator;
 
@@ -14,22 +8,34 @@ const {ccclass, property} = cc._decorator;
 export default class TouchMove extends cc.Component {
     mouseDrag :Boolean = false;
 
-    start () {
-        this.mouseDrag = false;
+    private moveCallBack : Function;
+    private moveEndCallBack : Function;
+    
 
-        function onTouchMove(event) {
+    start () 
+    {
+        this.moveCallBack = (event)=>
+        {
+            if (GameModule.GetStatus() == false) {
+                return;
+            }
             var x = event.getDeltaX();
             var y = event.getDeltaY();
-            this.x += x;
-            this.y += y;
-        }
-
-        this.node.on('touchmove',onTouchMove, this.node);
-
-        this.node.on('touchend',function(event)
+            this.node.x += x;
+            this.node.y += y;
+        };
+        this.moveEndCallBack = ( event) =>
         {
-            cc.log("touchend");
-        }  ,this);
+            if (this.mouseDrag  && GameModule.GetStatus()) {
+                this.node.dispatchEvent(new cc.Event.EventCustom("addScore",true))
+                BasketModule.DeleteBall(this.node);
+                BasketModule.AddBasketBall();
+            }
+        };
+
+        this.mouseDrag = false;
+        this.node.on('touchmove', this.moveCallBack, this.node);
+        this.node.on('touchend',this.moveEndCallBack ,this);
     }
 
     onCollisionEnter  (other ,self)

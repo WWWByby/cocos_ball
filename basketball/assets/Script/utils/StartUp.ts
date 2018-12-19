@@ -1,4 +1,7 @@
 import BasketModule from "../module/BasketModule";
+import DialogStack from "../view/DialogStack";
+import GameModule from "../module/GameModule";
+import SceneUI from "../view/\bSceneUI";
 
 const {ccclass, property} = cc._decorator;
 
@@ -28,7 +31,19 @@ export default class StartUp extends cc.Component {
 
     start ()
     {
-        BasketModule.AddBasketBall();
+        DialogStack.InitSceneUI();
+        this.node.on("addScore",()=>
+        {
+            GameModule.AddScore();
+
+            let node = DialogStack.GetStackPanel("SceneUI");
+            let script = node.getComponent(SceneUI);
+
+            if (script) {
+                script.fresh();
+            }
+            // GetStackPanel
+        });
     }
 
     ///创建球生成的父节点
@@ -41,6 +56,10 @@ export default class StartUp extends cc.Component {
         return this.ballNode;
     }
 
-
+    onDestroy ()
+    {
+        // this.node.removeFromParent();
+        this.node.off("addScore");
+    }
 
 }
