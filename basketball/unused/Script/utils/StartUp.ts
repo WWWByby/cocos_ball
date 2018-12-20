@@ -29,21 +29,28 @@ export default class StartUp extends cc.Component {
         // cc.director.getCollisionManager().enabledDrawBoundingBox = true;
     }
 
-    start ()
+
+    callback ()
     {
-        DialogStack.InitSceneUI();
-        this.node.on("addScore",()=>
-        {
-            GameModule.AddScore();
+        GameModule.AddScore();
 
-            let node = DialogStack.GetStackPanel("SceneUI");
+        let node = DialogStack.GetStackPanel("SceneUI");
+
+        if (node) {
             let script = node.getComponent(SceneUI);
-
             if (script) {
                 script.fresh();
             }
-            // GetStackPanel
-        });
+        }
+        else{
+            this.node.off("addScore",this.callback)
+        }
+    }
+
+    start ()
+    {
+        DialogStack.InitSceneUI();
+        this.node.on("addScore",this.callback);
     }
 
     ///创建球生成的父节点

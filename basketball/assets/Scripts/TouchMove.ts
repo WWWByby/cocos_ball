@@ -1,7 +1,3 @@
-import BasketModule from "../module/BasketModule";
-import Test from "../Test";
-import GameModule from "../module/GameModule";
-
 const {ccclass, property} = cc._decorator;
 
 @ccclass
@@ -16,9 +12,6 @@ export default class TouchMove extends cc.Component {
     {
         this.moveCallBack = (event)=>
         {
-            if (GameModule.GetStatus() == false) {
-                return;
-            }
             var x = event.getDeltaX();
             var y = event.getDeltaY();
             this.node.x += x;
@@ -26,11 +19,7 @@ export default class TouchMove extends cc.Component {
         };
         this.moveEndCallBack = ( event) =>
         {
-            if (this.mouseDrag  && GameModule.GetStatus()) {
-                this.node.dispatchEvent(new cc.Event.EventCustom("addScore",true))
-                BasketModule.DeleteBall(this.node);
-                BasketModule.AddBasketBall();
-            }
+            cc.game.emit("TOUCH_END");
         };
 
         this.mouseDrag = false;
@@ -41,10 +30,14 @@ export default class TouchMove extends cc.Component {
     onCollisionEnter  (other ,self)
     {
         this.mouseDrag = true;
+        cc.log("onCollisionEnter");
+        cc.game.emit("LOCAL_ENTER_CHANGE");
     }
 
     onCollisionExit () 
     {
+        cc.log("onCollisionExit");
         this.mouseDrag = false;
+        cc.game.emit("LOCAL_EXIT_CHANGE");
     }
 }
