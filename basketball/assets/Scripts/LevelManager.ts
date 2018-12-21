@@ -8,8 +8,8 @@ export default class LevelManager extends cc.Component {
     @property(cc.Node)
     scenePrefab :cc.Node = null;
 
-    config = [];
-    level :number = 0;
+    private config = [];
+    private level :number = 0;
     start ()
     {
         cc.director.getCollisionManager().enabled = true;   
@@ -27,9 +27,9 @@ export default class LevelManager extends cc.Component {
         });
     }
 
-    currentNode :cc.Node = null;
+    private currentNode :cc.Node = null;
 
-    PushScene(level:number)
+    private PushScene(level:number)
     {
         this.level = level;
         let config = this.config[level];
@@ -63,7 +63,7 @@ export default class LevelManager extends cc.Component {
     }
 
 
-    RunAction(upNode:cc.Node,nextNode:cc.Node,callback : Function)
+    private RunAction(upNode:cc.Node,nextNode:cc.Node,callback : Function)
     {
         let callF = cc.callFunc(function() {
             upNode.destroy();

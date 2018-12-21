@@ -64,7 +64,7 @@ export default class UIManager extends cc.Component
         }
     }
 
-    StartPanelInit()
+    private StartPanelInit()
     {
         let number = Panel.StartPanel.valueOf();
         const element = this.panelList[number];
@@ -77,7 +77,7 @@ export default class UIManager extends cc.Component
         } ,btn.node);
     }
 
-    SceneUIInit ()
+    private SceneUIInit ()
     {
         let number = Panel.SceneUI.valueOf();
         const element = this.panelList[number];
@@ -95,7 +95,7 @@ export default class UIManager extends cc.Component
         // SCORE_CHANGE
     }
 
-    SettleInit()
+    private SettleInit()
     {
         let number = Panel.Settle.valueOf();
         const element = this.panelList[number];

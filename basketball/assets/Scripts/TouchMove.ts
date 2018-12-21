@@ -2,7 +2,7 @@ const {ccclass, property} = cc._decorator;
 
 @ccclass
 export default class TouchMove extends cc.Component {
-    mouseDrag :Boolean = false;
+    private mouseDrag :Boolean = false;
 
     private moveCallBack : Function;
     private moveEndCallBack : Function;
@@ -23,7 +23,9 @@ export default class TouchMove extends cc.Component {
         };
 
         this.mouseDrag = false;
+        
         this.node.on('touchmove', this.moveCallBack, this.node);
+
         this.node.on('touchend',this.moveEndCallBack ,this);
     }
 

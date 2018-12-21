@@ -10,8 +10,8 @@ export default class GameManager extends cc.Component
     ballTriggger : boolean = false;    
     @property(UIManager)
     uiManager :UIManager = null;
-    @property
-    gamestatus :boolean = false;
+
+    private gamestatus :boolean = false;
 
     private timer:number = 0;
     private maxTimer:number = 0;
@@ -30,7 +30,7 @@ export default class GameManager extends cc.Component
         this.maxTimer = _timer;
         this.next = _next;
     }
-
+    
 
     private RegisterEvent()
     {
@@ -80,7 +80,7 @@ export default class GameManager extends cc.Component
     }
     
 
-    StartGame()
+    private StartGame()
     {
         this.AddBasketBall();
         this.ballCount = 0;
@@ -123,7 +123,7 @@ export default class GameManager extends cc.Component
         }
     }
     //结算游戏
-    SettleGame ()
+    private SettleGame ()
     {
         this.DestroyBall()
         this.timerStatus= false;
@@ -135,7 +135,7 @@ export default class GameManager extends cc.Component
             next:this.next
         })
     }
-
+    //加分
     AddScore()
     {
         this.ballCount +=1;
@@ -146,8 +146,8 @@ export default class GameManager extends cc.Component
         this.AddBasketBall();
     }
 
-
-    AddBasketBall ()
+    //显示球 随机设置位置
+    private AddBasketBall ()
     {
         if (this.ball == null) {
             return;
@@ -156,12 +156,13 @@ export default class GameManager extends cc.Component
         this.ball.setPosition(GameManager.RandomBallPos());
     }
 
-    DestroyBall()
+    //隐藏球
+    private DestroyBall()
     {
         this.ball.active = false;
     }
-
-    static RandomBallPos()
+    //随机位置
+    private static RandomBallPos()
     {
         const x = cc.winSize.width * (Math.random() - .5);
         const y = cc.winSize.height * (Math.random() - .5);
