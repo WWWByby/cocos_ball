@@ -31,12 +31,11 @@ export default class GameManager extends cc.Component
         this.next = _next;
     }
 
+
     private RegisterEvent()
     {
         cc.game.on("TOUCH_END",()=>
         {
-
-            cc.log(this.ballTriggger);
             if (this.ballTriggger == true) {
                 this.AddScore();
             }
@@ -67,9 +66,7 @@ export default class GameManager extends cc.Component
     }
     onLoad ()
     {
-        cc.director.getCollisionManager().enabled = true;   
-        cc.director.getCollisionManager().enabledDebugDraw = true;
-        cc.director.getCollisionManager().enabledDrawBoundingBox = true;
+        
         this.RegisterEvent();
 
         // this.init(10,5);
@@ -169,5 +166,12 @@ export default class GameManager extends cc.Component
         const x = cc.winSize.width * (Math.random() - .5);
         const y = cc.winSize.height * (Math.random() - .5);
         return cc.v2(x,y);
+    }
+
+    onDestroy ()
+    {
+        if (this.ball && this.ball.isValid ) {
+            this.ball.destroy();
+        }
     }
 }

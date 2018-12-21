@@ -104,12 +104,8 @@ export default class UIManager extends cc.Component
 
         cc.game.on("SETTLE_END",(event)=>
         {
-            cc.log("====>>>",event.detail.msg);
-            // result
-        
             lb.string = event.detail.msg == true ? "过关了" : "失败了"
             next.active = event.detail.next && event.detail.msg ;
-            // timerLabel.string = event.detail.msg
         })
 
         let restart = element.getChildByName("restart");

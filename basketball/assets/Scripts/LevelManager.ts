@@ -1,18 +1,9 @@
 import GameManager from './GameManager';
-// Learn TypeScript:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/typescript.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/typescript.html
-// Learn Attribute:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/reference/attributes.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/reference/attributes.html
-// Learn life-cycle callbacks:
-//  - [Chinese] http://docs.cocos.com/creator/manual/zh/scripting/life-cycle-callbacks.html
-//  - [English] http://www.cocos2d-x.org/docs/creator/manual/en/scripting/life-cycle-callbacks.html
 
 const {ccclass, property} = cc._decorator;
 
 @ccclass
-export default class NewClass extends cc.Component {
+export default class LevelManager extends cc.Component {
 
     @property(cc.Node)
     scenePrefab :cc.Node = null;
@@ -21,9 +12,12 @@ export default class NewClass extends cc.Component {
     level :number = 0;
     start ()
     {
-        this.config[0] = { time : 5, count : 1 };
-        this.config[1] = { time : 5, count : 1 };
-        this.config[2] = { time : 5, count : 1 };
+        cc.director.getCollisionManager().enabled = true;   
+        cc.director.getCollisionManager().enabledDebugDraw = true;
+        // cc.director.getCollisionManager().enabledDrawBoundingBox = true;
+        this.config[0] = { time : 30, count : 10 };
+        this.config[1] = { time : 20, count : 8 };
+        this.config[2] = { time : 10, count : 5 };
         this.PushScene(0);
 
         cc.game.on("NEXT_GAME",()=>
@@ -39,8 +33,6 @@ export default class NewClass extends cc.Component {
     {
         this.level = level;
         let config = this.config[level];
-
-        cc.log(level,"=====>>>");
         if (this.currentNode==null) {
             let asset = cc.instantiate(this.scenePrefab);
             asset.active = true
@@ -54,6 +46,7 @@ export default class NewClass extends cc.Component {
             gm.EnterGame();
         }
         else{
+            
             let asset = cc.instantiate(this.scenePrefab);
             asset.active = true
             asset.setParent(this.node);
@@ -74,6 +67,8 @@ export default class NewClass extends cc.Component {
     {
         let callF = cc.callFunc(function() {
             upNode.destroy();
+
+            // cc.log();
             if (callback) {
                 callback();
             }

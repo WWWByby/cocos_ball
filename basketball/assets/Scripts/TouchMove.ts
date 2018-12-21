@@ -30,13 +30,11 @@ export default class TouchMove extends cc.Component {
     onCollisionEnter  (other ,self)
     {
         this.mouseDrag = true;
-        cc.log("onCollisionEnter");
         cc.game.emit("LOCAL_ENTER_CHANGE");
     }
 
     onCollisionExit () 
     {
-        cc.log("onCollisionExit");
         this.mouseDrag = false;
         cc.game.emit("LOCAL_EXIT_CHANGE");
     }
