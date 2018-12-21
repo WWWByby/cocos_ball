@@ -1,4 +1,5 @@
 import UIManager, { Panel } from './UIManager';
+import TouchMove from './TouchMove';
 const {ccclass, property} = cc._decorator;
 
 @ccclass
@@ -6,8 +7,7 @@ export default class GameManager extends cc.Component
 {
     @property(cc.Node)
     ball : cc.Node = null;
-    ///检测球是否在框的区域
-    ballTriggger : boolean = false;    
+    ///检测球是否在框的区域    
     @property(UIManager)
     uiManager :UIManager = null;
 
@@ -34,29 +34,19 @@ export default class GameManager extends cc.Component
 
     private RegisterEvent()
     {
-        cc.game.on("TOUCH_END",()=>
+        this.ball.on("TOUCH_END",()=>
         {
-            if (this.ballTriggger == true) {
+            if (this.ball.getComponent(TouchMove).GetIsGoal() && this.gamestatus ) {
                 this.AddScore();
             }
         },this);
 
-        cc.game.on("LOCAL_ENTER_CHANGE",()=>
-        {
-            this.ballTriggger = true;
-        },this);
-
-        cc.game.on("LOCAL_EXIT_CHANGE",()=>
-        {
-            this.ballTriggger = false;
-        },this);
-
-        cc.game.on("START_GAME",()=>
+        this.uiManager.node.on("START_GAME",()=>
         {
             this.StartGame();
         },this);
 
-        cc.game.on("RESTART_GAME",()=>
+        this.uiManager.node.on("RESTART_GAME",()=>
         {
             this.uiManager.ChangePanel(Panel.Settle);
             this.init(this.maxTimer,this.ballMaxCount,this.next);
@@ -87,9 +77,7 @@ export default class GameManager extends cc.Component
         this.gamestatus = true;
         this.timerStatus = true;
         this.uiManager.ChangePanel(Panel.SceneUI,true);
-        cc.game.emit("SCORE_CHANGE",{
-            msg:this.ballCount
-        })
+        this.uiManager.FreshScore(this.ballCount);
     }
 
 
@@ -100,21 +88,19 @@ export default class GameManager extends cc.Component
             return;
         }
         
-        if (this.localTimer != -1) {
+        if (this.localTimer != -1) 
+        {
             this.timer -= dt;
             let tmp = Math.floor(this.timer);
             if (this.localTimer != tmp ) {
-                cc.game.emit("TIME_CHANGE", {
-                    msg: this.localTimer
-                  });
+                this.uiManager.FreshTimer(this.localTimer);
             }
             this.localTimer = tmp;
         }
-        else{
+        else
+        {
             this.localTimer = Math.floor(this.timer);
-            cc.game.emit("TIME_CHANGE", {
-                msg: this.localTimer
-              });
+            this.uiManager.FreshTimer(this.localTimer);
         }
         
         if (this.timer< 0) {
@@ -129,19 +115,13 @@ export default class GameManager extends cc.Component
         this.timerStatus= false;
         this.uiManager.ChangePanel(Panel.SceneUI);
         this.uiManager.ChangePanel(Panel.Settle,true);
-
-        cc.game.emit("SETTLE_END",{
-            msg:this.ballCount >= this.ballMaxCount,
-            next:this.next
-        })
+        this.uiManager.FreshSettle(this.ballCount >= this.ballMaxCount,this.next);
     }
     //加分
     AddScore()
     {
         this.ballCount +=1;
-        cc.game.emit("SCORE_CHANGE",{
-            msg:this.ballCount
-        })
+        this.uiManager.FreshScore(this.ballCount);
 
         this.AddBasketBall();
     }

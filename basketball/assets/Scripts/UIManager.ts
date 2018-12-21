@@ -73,51 +73,67 @@ export default class UIManager extends cc.Component
         btn.node.on("click", ()=>
         {
             this.ChangePanel(Panel.StartPanel);
-            cc.game.emit("START_GAME");
-        } ,btn.node);
+            this.node.emit("START_GAME");
+        } ,this);
+    }
+    private scoreLabel :cc.Label = null;
+    private timerLabel :cc.Label = null;
+    
+
+    FreshScore(msg:number)
+    {
+        this.scoreLabel.string = msg.toString();
+    }
+
+    FreshTimer(msg:number)
+    {
+        this.timerLabel.string = msg.toString();
     }
 
     private SceneUIInit ()
     {
         let number = Panel.SceneUI.valueOf();
         const element = this.panelList[number];
-        let timerLabel = element.getChildByName("timer").getComponent(cc.Label);
-        let infoLabel = element.getChildByName("score").getComponent(cc.Label);
-
-        cc.game.on("TIME_CHANGE",(event)=>
-        {
-            timerLabel.string = event.detail.msg
-        })
-        cc.game.on("SCORE_CHANGE",(event)=>
-        {
-            infoLabel.string = event.detail.msg
-        })
-        // SCORE_CHANGE
+        if (this.timerLabel == null) {
+            this.timerLabel = element.getChildByName("timer").getComponent(cc.Label);
+        }
+        if (this.scoreLabel == null) {
+            this.scoreLabel = element.getChildByName("score").getComponent(cc.Label);
+        }
     }
+
+    private result :cc.Label = null;
+    private next : cc.Node = null;
+
+    FreshSettle(resultmsg:boolean,nt :boolean)
+    {
+        this.result.string = resultmsg == true ? "过关了" : "失败了"
+        this.next.active = nt && resultmsg;
+    }
+
 
     private SettleInit()
     {
         let number = Panel.Settle.valueOf();
         const element = this.panelList[number];
-        let lb = element.getChildByName("result").getComponent(cc.Label);
-        let next = element.getChildByName("next");
+        if (this.result==null) {
+            this.result = element.getChildByName("result").getComponent(cc.Label);
+        }
 
-        cc.game.on("SETTLE_END",(event)=>
-        {
-            lb.string = event.detail.msg == true ? "过关了" : "失败了"
-            next.active = event.detail.next && event.detail.msg ;
-        })
+        if (this.next == null) {
+            this.next = element.getChildByName("next");
+        }
 
         let restart = element.getChildByName("restart");
         restart.on('click', ()=>
         {
-            cc.game.emit("RESTART_GAME")
+            this.node.emit("RESTART_GAME")
         },this);
 
 
-        next.on('click', ()=>
+        this.next.on('click', ()=>
         {
-            cc.game.emit("NEXT_GAME")
+            this.node.emit("NEXT_GAME")
         },this);
     }
 

@@ -2,7 +2,7 @@ const {ccclass, property} = cc._decorator;
 
 @ccclass
 export default class TouchMove extends cc.Component {
-    private mouseDrag :Boolean = false;
+    private isGoal :Boolean = false;
 
     private moveCallBack : Function;
     private moveEndCallBack : Function;
@@ -19,10 +19,10 @@ export default class TouchMove extends cc.Component {
         };
         this.moveEndCallBack = ( event) =>
         {
-            cc.game.emit("TOUCH_END");
+            this.node.emit("TOUCH_END");
         };
 
-        this.mouseDrag = false;
+        this.isGoal = false;
         
         this.node.on('touchmove', this.moveCallBack, this.node);
 
@@ -31,13 +31,15 @@ export default class TouchMove extends cc.Component {
 
     onCollisionEnter  (other ,self)
     {
-        this.mouseDrag = true;
-        cc.game.emit("LOCAL_ENTER_CHANGE");
+        this.isGoal = true;
     }
 
     onCollisionExit () 
     {
-        this.mouseDrag = false;
-        cc.game.emit("LOCAL_EXIT_CHANGE");
+        this.isGoal = false;
+    }
+
+    GetIsGoal() {
+        return this.isGoal;
     }
 }
